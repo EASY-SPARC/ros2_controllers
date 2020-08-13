@@ -51,38 +51,6 @@ install(
   LIBRARY DESTINATION lib
 )
 
-if(BUILD_TESTING)
-  find_package(ament_cmake_gtest REQUIRED)
-  find_package(ament_lint_auto REQUIRED)
-  find_package(controller_manager REQUIRED)
-  find_package(rclcpp REQUIRED)
-  find_package(test_robot_hardware REQUIRED)
-
-  ament_lint_auto_find_test_dependencies()
-
-  ament_add_gtest(
-    test_load_joint_state_controller
-    test/test_load_joint_state_controller.cpp
-  )
-  target_include_directories(test_load_joint_state_controller PRIVATE include)
-  ament_target_dependencies(test_load_joint_state_controller
-    controller_manager
-    test_robot_hardware
-  )
-
-  ament_add_gtest(
-    test_joint_state_controller
-    test/test_joint_state_controller.cpp
-  )
-  target_include_directories(test_joint_state_controller PRIVATE include)
-  target_link_libraries(test_joint_state_controller
-    joint_state_controller
-  )
-  ament_target_dependencies(test_joint_state_controller
-    test_robot_hardware
-  )
-endif()
-
 ament_export_dependencies(
   control_msgs
   controller_interface

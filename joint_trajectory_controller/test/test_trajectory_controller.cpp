@@ -28,7 +28,7 @@
 
 #include "builtin_interfaces/msg/duration.hpp"
 #include "builtin_interfaces/msg/time.hpp"
-#include "control_msgs/msg/detail/joint_trajectory_controller_state__struct.hpp"
+#include "control_msgs/msg/joint_trajectory_controller_state__struct.hpp"
 #include "controller_interface/controller_interface.hpp"
 #include "joint_trajectory_controller/joint_trajectory_controller.hpp"
 #include "lifecycle_msgs/msg/state.hpp"
@@ -517,7 +517,7 @@ void test_state_publish_rate_target(
 
   // update for 1second
   const auto start_time = rclcpp::Clock().now();
-  const rclcpp::Duration wait = rclcpp::Duration::from_seconds(1.0);
+  const rclcpp::Duration wait = rclcpp::Duration(1.0);
   const auto end_time = start_time + wait;
   while (rclcpp::Clock().now() < end_time) {
     traj_controller->update();
@@ -572,7 +572,7 @@ TEST_F(TestTrajectoryController, test_jumbled_joint_order) {
     traj_msg.header.stamp = rclcpp::Time(0);
     traj_msg.points.resize(1);
 
-    traj_msg.points[0].time_from_start = rclcpp::Duration::from_seconds(0.25);
+    traj_msg.points[0].time_from_start = rclcpp::Duration(0.0,0.25e9);
     traj_msg.points[0].positions.resize(3);
     traj_msg.points[0].positions[0] = 2.0;
     traj_msg.points[0].positions[1] = 3.0;
@@ -583,7 +583,7 @@ TEST_F(TestTrajectoryController, test_jumbled_joint_order) {
 
   // update for 0.5 seconds
   const auto start_time = rclcpp::Clock().now();
-  const rclcpp::Duration wait = rclcpp::Duration::from_seconds(0.5);
+  const rclcpp::Duration wait = rclcpp::Duration(0.0,0.5e9);
   const auto end_time = start_time + wait;
   while (rclcpp::Clock().now() < end_time) {
     test_robot_->read();
@@ -641,7 +641,7 @@ TEST_F(TestTrajectoryController, test_partial_joint_list) {
     traj_msg.header.stamp = rclcpp::Time(0);
     traj_msg.points.resize(1);
 
-    traj_msg.points[0].time_from_start = rclcpp::Duration::from_seconds(0.25);
+    traj_msg.points[0].time_from_start = rclcpp::Duration(0.0,0.25e9);
     traj_msg.points[0].positions.resize(2);
     traj_msg.points[0].positions[0] = 2.0;
     traj_msg.points[0].positions[1] = 1.0;
@@ -654,7 +654,7 @@ TEST_F(TestTrajectoryController, test_partial_joint_list) {
 
   // update for 0.5 seconds
   auto start_time = rclcpp::Clock().now();
-  rclcpp::Duration wait = rclcpp::Duration::from_seconds(0.5);
+  rclcpp::Duration wait = rclcpp::Duration(0.0,0.5e9);
   auto end_time = start_time + wait;
   while (rclcpp::Clock().now() < end_time) {
     test_robot_->read();

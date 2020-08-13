@@ -27,7 +27,7 @@
 
 #include "gtest/gtest.h"
 #include "action_msgs/msg/goal_status_array.hpp"
-#include "control_msgs/action/detail/follow_joint_trajectory__struct.hpp"
+#include "control_msgs/action/follow_joint_trajectory__struct.hpp"
 #include "controller_interface/controller_interface.hpp"
 #include "joint_trajectory_controller/joint_trajectory_controller.hpp"
 #include "rclcpp/clock.hpp"
@@ -121,7 +121,7 @@ protected:
       [&]() {
         // controller hardware cycle update loop
         auto start_time = rclcpp::Clock().now();
-        rclcpp::Duration wait = rclcpp::Duration::from_seconds(2.0);
+        rclcpp::Duration wait = rclcpp::Duration(2.0);
         auto end_time = start_time + wait;
         while (rclcpp::Clock().now() < end_time) {
           test_robot_->read();
@@ -191,7 +191,7 @@ protected:
     const GoalOptions & opt)
   {
     control_msgs::action::FollowJointTrajectory_Goal goal_msg;
-    goal_msg.goal_time_tolerance = rclcpp::Duration::from_seconds(timeout);
+    goal_msg.goal_time_tolerance = rclcpp::Duration(timeout,0.0);
     goal_msg.trajectory.joint_names = joint_names_;
     goal_msg.trajectory.points = points;
 
@@ -270,7 +270,7 @@ TEST_F(TestTrajectoryActions, test_success_single_point_sendgoal) {
   {
     std::vector<JointTrajectoryPoint> points;
     JointTrajectoryPoint point;
-    point.time_from_start = rclcpp::Duration::from_seconds(0.0);  // start asap
+    point.time_from_start = rclcpp::Duration(0.0);  // start asap
     point.positions.resize(joint_names_.size());
 
     point.positions[0] = 1.0;
@@ -309,7 +309,7 @@ TEST_F(TestTrajectoryActions, test_success_multi_point_sendgoal) {
   {
     std::vector<JointTrajectoryPoint> points;
     JointTrajectoryPoint point1;
-    point1.time_from_start = rclcpp::Duration::from_seconds(0.2);
+    point1.time_from_start = rclcpp::Duration(0.0,0.2e9);
     point1.positions.resize(joint_names_.size());
 
     point1.positions[0] = 4.0;
@@ -318,7 +318,7 @@ TEST_F(TestTrajectoryActions, test_success_multi_point_sendgoal) {
     points.push_back(point1);
 
     JointTrajectoryPoint point2;
-    point2.time_from_start = rclcpp::Duration::from_seconds(0.3);
+    point2.time_from_start = rclcpp::Duration(0.0,0.3e9);
     point2.positions.resize(joint_names_.size());
 
     point2.positions[0] = 7.0;
@@ -352,7 +352,7 @@ TEST_F(TestTrajectoryActions, test_goal_tolerances_single_point_success) {
   {
     std::vector<JointTrajectoryPoint> points;
     JointTrajectoryPoint point;
-    point.time_from_start = rclcpp::Duration::from_seconds(0.0);  // start asap
+    point.time_from_start = rclcpp::Duration(0.0);  // start asap
     point.positions.resize(joint_names_.size());
 
     point.positions[0] = 1.0;
@@ -398,7 +398,7 @@ TEST_F(TestTrajectoryActions, test_goal_tolerances_multi_point_success) {
   {
     std::vector<JointTrajectoryPoint> points;
     JointTrajectoryPoint point1;
-    point1.time_from_start = rclcpp::Duration::from_seconds(0.2);
+    point1.time_from_start = rclcpp::Duration(0.0,0.2e9);
     point1.positions.resize(joint_names_.size());
 
     point1.positions[0] = 4.0;
@@ -407,7 +407,7 @@ TEST_F(TestTrajectoryActions, test_goal_tolerances_multi_point_success) {
     points.push_back(point1);
 
     JointTrajectoryPoint point2;
-    point2.time_from_start = rclcpp::Duration::from_seconds(0.3);
+    point2.time_from_start = rclcpp::Duration(0.0,0.3e9);
     point2.positions.resize(joint_names_.size());
 
     point2.positions[0] = 7.0;
@@ -445,7 +445,7 @@ TEST_F(TestTrajectoryActions, test_state_tolerances_fail) {
   {
     std::vector<JointTrajectoryPoint> points;
     JointTrajectoryPoint point;
-    point.time_from_start = rclcpp::Duration::from_seconds(1.0);
+    point.time_from_start = rclcpp::Duration(1.0);
     point.positions.resize(joint_names_.size());
 
     point.positions[0] = 4.0;
@@ -472,7 +472,7 @@ TEST_F(TestTrajectoryActions, test_cancel_hold_position) {
   {
     std::vector<JointTrajectoryPoint> points;
     JointTrajectoryPoint point;
-    point.time_from_start = rclcpp::Duration::from_seconds(1.0);
+    point.time_from_start = rclcpp::Duration(1.0);
     point.positions.resize(joint_names_.size());
 
     point.positions[0] = 4.0;
@@ -481,7 +481,7 @@ TEST_F(TestTrajectoryActions, test_cancel_hold_position) {
     points.push_back(point);
 
     control_msgs::action::FollowJointTrajectory_Goal goal_msg;
-    goal_msg.goal_time_tolerance = rclcpp::Duration::from_seconds(2.0);
+    goal_msg.goal_time_tolerance = rclcpp::Duration(2.0);
     goal_msg.trajectory.joint_names = joint_names_;
     goal_msg.trajectory.points = points;
 

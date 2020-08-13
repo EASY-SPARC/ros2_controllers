@@ -348,14 +348,13 @@ JointTrajectoryController::on_configure(const rclcpp_lifecycle::State & previous
   // State publisher
   const double state_publish_rate =
     lifecycle_node_->get_parameter("state_publish_rate").get_value<double>();
-  RCLCPP_INFO_STREAM(
-    logger, "Controller state will be published at " <<
-      state_publish_rate << "Hz.");
+  RCLCPP_INFO(
+    logger, "Controller state will be published at %f Hz.",state_publish_rate);
   if (state_publish_rate > 0.0) {
     state_publisher_period_ =
-      rclcpp::Duration::from_seconds(1.0 / state_publish_rate);
+      rclcpp::Duration(0, 1e9 / state_publish_rate);
   } else {
-    state_publisher_period_ = rclcpp::Duration::from_seconds(0.0);
+    state_publisher_period_ = rclcpp::Duration(0.0,0.0);
   }
 
   publisher_ = lifecycle_node_->create_publisher<ControllerStateMsg>(
@@ -387,10 +386,9 @@ JointTrajectoryController::on_configure(const rclcpp_lifecycle::State & previous
   const double action_monitor_rate = lifecycle_node_->get_parameter("action_monitor_rate")
     .get_value<double>();
 
-  RCLCPP_INFO_STREAM(
-    logger, "Action status changes will be monitored at " <<
-      action_monitor_rate << "Hz.");
-  action_monitor_period_ = rclcpp::Duration::from_seconds(1.0 / action_monitor_rate);
+  RCLCPP_INFO(
+    logger, "Action status changes will be monitored at %f Hz.", action_monitor_rate);
+  action_monitor_period_ = rclcpp::Duration(0, 1e9 / action_monitor_rate);
 
   using namespace std::placeholders;
   action_server_ = rclcpp_action::create_server<FollowJTrajAction>(
